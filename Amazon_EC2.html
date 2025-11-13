@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing Study Guide: Amazon EC2</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root { --primary-color: #FF9900; --secondary-color: #232F3E; --text-color: #333; --bg-color: #f4f6f8; --card-bg: #ffffff; --header-bg: #232F3E; --header-text: #ffffff; --accent-light: #f8f9fa; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; }
+        header.main-header { background-color: var(--header-bg); color: var(--header-text); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .course-info { text-align: right; font-size: 0.9rem; }
+        main { padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; flex-grow: 1; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-left: 5px solid var(--primary-color); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+        h1, h2, h3 { color: var(--secondary-color); margin-top: 0; }
+        h1.topic-header { font-size: 2.5rem; text-align: center; margin-bottom: 2rem; color: var(--secondary-color); border-bottom: 3px solid var(--primary-color); padding-bottom: 0.5rem; }
+        h2 { font-size: 1.8rem; border-bottom: 2px solid var(--accent-light); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.4rem; margin-top: 1.5rem; }
+        strong { color: var(--secondary-color); }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: var(--accent-light); font-weight: bold; color: var(--secondary-color); }
+        tr:nth-child(even) { background-color: #fafafa; }
+        tr:hover { background-color: #f1f1f1; }
+        .mermaid, .chart-container { background: var(--card-bg); padding: 1.5rem; border-radius: 8px; text-align: center; margin: 1.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .chart-container { height: 400px; }
+        pre { position: relative; background: #282c34; color: #abb2bf; padding: 1.5rem; border-radius: 8px; overflow-x: auto; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #61afef; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+        pre:hover .copy-btn { opacity: 1; }
+        details { background: var(--accent-light); border-radius: 8px; padding: 0.5rem 1.5rem; margin-top: 1rem; border: 1px solid #dee2e6; }
+        summary { font-weight: bold; cursor: pointer; color: var(--secondary-color); padding: 0.5rem 0; }
+        .quiz-answer { padding: 1rem; background: white; border-radius: 5px; margin-top: 0.5rem; }
+        .action-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .action-buttons button, .action-buttons a { background-color: var(--primary-color); color: white; border: none; border-radius: 50%; width: 56px; height: 56px; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center; text-decoration: none; transition: background-color 0.3s; }
+        .action-buttons button:hover, .action-buttons a:hover { background-color: #E68A00; }
+        footer { text-align: center; padding: 2rem; background: var(--header-bg); color: var(--header-text); margin-top: auto; }
+        @media (max-width: 768px) { main { padding: 1rem; } h1.topic-header { font-size: 2rem; } header.main-header { flex-direction: column; gap: 0.5rem; } }
+        @media print { body { background-color: white; color: black; } header.main-header, .action-buttons, footer { display: none; } main { padding: 0; max-width: 100%; } .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; } h1, h2, h3 { color: black !important; } pre { background: #f5f5f5; color: black; border: 1px solid #ddd; } }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">☁️ CloudLearn</div>
+        <div class="course-info">Cloud Computing — 21CSCU05D2 — LK<br>Generated: <span id="generation-date"></span></div>
+    </header>
+    <main>
+        <h1 class="topic-header">Amazon Elastic Compute Cloud (EC2)</h1>
+        <section id="introduction" class="card">
+            <h2>📘 Concept Introduction</h2>
+            <p><strong>Amazon Elastic Compute Cloud (EC2)</strong> is a foundational web service from Amazon Web Services (AWS) that provides secure, resizable compute capacity in the cloud. As a core <strong>Infrastructure as a Service (IaaS)</strong> offering, it is designed to make web-scale cloud computing easier for developers by providing virtual servers, known as "instances," that can be provisioned in minutes.</p>
+        </section>
+        <section id="analogy" class="card">
+            <h2>🧩 Analogy: Renting a Car</h2>
+            <p>Using EC2 is like renting a car. Instead of buying, insuring, and maintaining your own vehicle, you go to a rental agency. You can choose the exact model you need (an economy car for city driving, an SUV for a family trip, a sports car for fun), pay for it only for the time you use it (by the hour or day), and simply return it when you're done. EC2 lets you do the same with servers, eliminating the massive upfront cost and long-term commitment of physical hardware.</p>
+        </section>
+        <section id="in-depth" class="card">
+            <h2>🔍 In-Depth Explanation</h2>
+            <h3>Core Components of EC2</h3>
+            <ul>
+                <li><strong>Instances:</strong> These are the virtual servers. They come in a wide variety of types, optimized for different tasks.</li>
+                <li><strong>Amazon Machine Images (AMIs):</strong> Pre-configured templates for your instances that package the OS and other software. You can choose from standard AMIs (e.g., Ubuntu, Windows Server) or create your own.</li>
+                <li><strong>Instance Types:</strong> A family of instances optimized for different workloads, such as General Purpose (M, T series), Compute Optimized (C series), Memory Optimized (R, X series), and Accelerated Computing (P, G, Trn series for ML/graphics).</li>
+                <li><strong>Elastic Block Store (EBS):</strong> Persistent block storage volumes for use with EC2 instances, similar to a hard drive for your virtual server.</li>
+                <li><strong>Security Groups:</strong> A virtual firewall for your instances to control inbound and outbound traffic. It's a fundamental security layer.</li>
+                <li><strong>Pricing Models:</strong> EC2 offers flexible pricing: <strong>On-Demand</strong> (pay by the second), <strong>Spot Instances</strong> (bid on unused capacity for huge savings, but can be interrupted), <strong>Reserved Instances</strong> (commit to 1-3 years for a large discount), and <strong>Savings Plans</strong> (commit to a certain spend for a discount).</li>
+            </ul>
+        </section>
+        <section id="examples" class="card">
+            <h2>🌍 Real-World Use Cases</h2>
+            <table>
+                <thead><tr><th>Use Case</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Web Hosting</strong></td><td>Hosting dynamic websites and web applications that can scale with traffic using Auto Scaling groups.</td></tr>
+                    <tr><td><strong>Big Data Processing</strong></td><td>Running large-scale data processing jobs using frameworks like Hadoop and Spark on a cluster of EC2 instances.</td></tr>
+                    <tr><td><strong>High-Performance Computing (HPC)</strong></td><td>Performing complex scientific simulations, financial modeling, and weather prediction on compute-optimized instances.</td></tr>
+                    <tr><td><strong>CI/CD Pipelines</strong></td><td>Using EC2 instances as build agents for continuous integration and deployment tools like Jenkins or GitLab Runners.</td></tr>
+                    <tr><td><strong>Disaster Recovery</strong></td><td>Maintaining a low-cost standby environment that can be quickly scaled up in case of a primary site failure.</td></tr>
+                </tbody>
+            </table>
+        </section>
+        <section id="visuals" class="card">
+            <h2>📊 Visual Representations</h2>
+            <h3>EC2 Instance Launch Flow</h3>
+            <div class="mermaid">
+graph TD
+    A[Start] --> B{Choose AMI};
+    B --> C{Choose Instance Type};
+    C --> D[Configure Network & Security Group];
+    D --> E("Select Storage/EBS");
+    E --> F[Configure & Launch];
+    F --> G((Running Instance));
+    style G fill:#2ECC40,stroke:#333
+            </div>
+            <h3>EC2 Pricing Model Comparison</h3>
+            <table>
+                <thead><tr><th>Model</th><th>Best For</th><th>Cost</th><th>Commitment</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>On-Demand</strong></td><td>Unpredictable, short-term workloads</td><td>Highest</td><td>None</td></tr>
+                    <tr><td><strong>Spot Instances</strong></td><td>Fault-tolerant, non-urgent tasks (e.g., batch processing)</td><td>Lowest (up to 90% off)</td><td>None (can be terminated)</td></tr>
+                    <tr><td><strong>Reserved Instances</strong></td><td>Steady-state, predictable usage</td><td>Medium (discounted)</td><td>1 or 3 Years</td></tr>
+                    <tr><td><strong>Savings Plans</strong></td><td>Flexible, long-term usage across services</td><td>Medium (discounted)</td><td>1 or 3 Years (spend commit)</td></tr>
+                </tbody>
+            </table>
+            <h3>Instance Family Comparison (Illustrative)</h3>
+            <div class="chart-container">
+                <canvas id="ec2Chart"></canvas>
+            </div>
+        </section>
+        <section id="updates" class="card">
+            <h2>🗞️ Recent Updates (2024–2025)</h2>
+            <ul>
+                <li><strong>2025-07-20:</strong> AWS announced the general availability of instances powered by <strong>AWS Graviton4</strong> processors, offering up to 30% better price-performance for a wide range of workloads over Graviton3.</li>
+                <li><strong>2025-02-10:</strong> Amazon EC2 now supports <strong>default encryption for all new EBS volumes</strong> created in an account, simplifying compliance and enhancing security posture with no performance impact.</li>
+                <li><strong>2024-11-15:</strong> Deeper integration with <strong>Amazon Q</strong>, an AI-powered assistant, allows developers to troubleshoot connectivity issues, select instance types, and analyze performance directly from the console using natural language.</li>
+            </ul>
+        </section>
+        <section id="summary" class="card">
+            <h2>📑 Summary</h2>
+            <ul>
+                <li>EC2 is the core <strong>IaaS compute service</strong> of AWS, providing virtual servers called instances.</li>
+                <li>It offers immense flexibility through a wide variety of <strong>instance types</strong>, software configurations (<strong>AMIs</strong>), and storage options (<strong>EBS</strong>).</li>
+                <li><strong>Security Groups</strong> are stateful firewalls that are essential for securing EC2 instances.</li>
+                <li>EC2's pricing models (<strong>On-Demand, Spot, Reserved, Savings Plans</strong>) allow users to optimize costs based on their workload patterns.</li>
+                <li>It is a fundamental building block for a vast range of applications, from simple websites to complex HPC clusters.</li>
+            </ul>
+        </section>
+        <section id="quiz" class="card">
+            <h2>🧠 Mini Quiz</h2>
+            <details>
+                <summary>1. What is an Amazon Machine Image (AMI)?</summary>
+                <div class="quiz-answer"><p>An AMI is a pre-configured template used to create an EC2 instance. It includes the operating system, application server, and applications, acting as a blueprint for the virtual server's root volume.</p></div>
+            </details>
+            <details>
+                <summary>2. Which EC2 pricing model offers the largest discount but carries the risk of termination?</summary>
+                <div class="quiz-answer"><p><strong>Spot Instances</strong>. They let you take advantage of unused EC2 capacity at discounts of up to 90% off the On-Demand price, but AWS can reclaim the capacity with a two-minute warning.</p></div>
+            </details>
+            <details>
+                <summary>3. What AWS component acts as a virtual firewall for an EC2 instance?</summary>
+                <div class="quiz-answer"><p>A <strong>Security Group</strong>. It controls inbound and outbound traffic at the instance level, specifying which protocols, ports, and source/destination IP ranges are allowed.</p></div>
+            </details>
+        </section>
+    </main>
+    <div class="action-buttons">
+        <a id="download-link" href="#" download="Amazon_EC2.html" title="Download HTML">💾</a>
+        <button onclick="window.print()" title="Export as PDF">📄</button>
+    </div>
+    <footer>
+        <p>Generated by Gemini Visual Learning Assistant</p>
+        <p>Citation: Gemini (2025). <em>Cloud Computing Study Guide: Amazon EC2</em>. Generated on <span id="footer-date"></span>.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date().toLocaleDateString();
+            document.getElementById('generation-date').textContent = today;
+            document.getElementById('footer-date').textContent = today;
+            try { 
+                mermaid.initialize({ 
+                    startOnLoad: true, 
+                    theme: 'default',
+                    securityLevel: 'loose',
+                    themeVariables: { 
+                        primaryColor: '#f8f9fa', 
+                        primaryTextColor: '#333', 
+                        primaryBorderColor: '#FF9900', 
+                        lineColor: '#232F3E', 
+                        secondaryColor: '#ffc107' 
+                    }
+                }); 
+                // Re-run mermaid after initialization to ensure diagrams render
+                setTimeout(() => {
+                    mermaid.init();
+                }, 100);
+            } catch (e) { console.error("Mermaid.js failed.", e); }
+            try { hljs.highlightAll(); } catch(e) { console.error("Highlight.js failed.", e); }
+
+            // Chart.js - EC2 Instance Comparison
+            try {
+                const ctx = document.getElementById('ec2Chart');
+                if(ctx) {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['General Purpose (T3)', 'Compute Optimized (C5)', 'Memory Optimized (R5)'],
+                            datasets: [
+                                { 
+                                    label: 'Relative Performance',
+                                    data: [6, 9, 5],
+                                    backgroundColor: 'rgba(255, 153, 0, 0.6)', // Primary color
+                                    borderColor: 'rgba(255, 153, 0, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'Relative Cost',
+                                    data: [4, 7, 8],
+                                    backgroundColor: 'rgba(35, 47, 62, 0.6)', // Secondary color
+                                    borderColor: 'rgba(35, 47, 62, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: 'Relative Units' }
+                                }
+                            },
+                            plugins: {
+                                title: { display: true, text: 'Illustrative EC2 Instance: Performance vs. Cost' },
+                                legend: { position: 'bottom' }
+                            }
+                        }
+                    });
+                }
+            } catch (e) { console.error("Chart.js failed.", e); }
+
+            function setDownloadLink() {
+                const downloadLink = document.getElementById('download-link');
+                const fileContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+                const blob = new Blob([fileContent], { type: 'text/html;charset=utf-8' });
+                downloadLink.href = URL.createObjectURL(blob);
+            }
+            setDownloadLink();
+        });
+    </script>
+</body>
+</html>

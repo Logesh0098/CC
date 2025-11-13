@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing Study Guide: Eucalyptus</title>
+    <style>
+        :root {
+            --primary-color: #005a9c; /* Deep Blue */
+            --secondary-color: #ffc107; /* Yellow */
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --header-bg: #004070;
+            --header-text: #ffffff;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        main section {
+            background-color: var(--card-bg);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        h2, h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: var(--header-text);
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .mermaid {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        details {
+            margin-top: 1rem;
+            background: #f1f1f1;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+        }
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* CSS Diagram Styles */
+        .css-diagram {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 1.5em;
+            background: #fdfdfd;
+            text-align: center;
+            margin: 2em 0;
+        }
+        .css-diagram .box {
+            border: 2px solid;
+            border-radius: 5px;
+            padding: 1em;
+            margin: 1em auto;
+            background-color: #fff;
+        }
+        .css-diagram .cluster-container { display: flex; flex-flow: row wrap; justify-content: center; gap: 1em; }
+        .css-diagram .vm-container { display: flex; flex-flow: row wrap; justify-content: center; gap: 1em; }
+        .css-diagram .arrow-down, .css-diagram .arrow-up {
+            font-size: 1.5em;
+            color: #6c757d;
+            margin: -0.5em 0;
+        }
+        .css-diagram .node {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 0.5em;
+            margin-top: 0.8em;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Cloud Computing — 21CSCU05D2 — LK</h1>
+    </header>
+
+    <div class="container">
+        <section id="topic">
+            <h2>Topic: Eucalyptus</h2>
+        </section>
+
+        <section id="intro">
+            <h3>1. Introduction to Eucalyptus</h3>
+            <p>
+                <strong>Eucalyptus</strong> is an open-source software platform for building <strong>AWS-compatible private and hybrid clouds</strong>. The name is an acronym for <em>Elastic Utility Computing Architecture for Linking Your Programs To Useful Systems</em>. Its primary design goal is to provide an Infrastructure as a Service (IaaS) platform that is functionally identical to Amazon Web Services (AWS), allowing users to leverage AWS tools and workflows within their own data center.
+            </p>
+            <div class="highlight" style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 1em 0; border-radius: 4px;">
+                <strong>Key Idea:</strong> Eucalyptus creates a private cloud that mimics AWS. This enables hybrid cloud scenarios where workloads can be moved between the private Eucalyptus cloud and the public AWS cloud with minimal changes.
+            </div>
+        </section>
+
+        <section id="arch">
+            <h3>2. Eucalyptus Architecture</h3>
+            <p>The architecture is modular and consists of five high-level components, each designed to replicate a specific AWS service.</p>
+            
+            <h4>Core Components</h4>
+            <ul>
+                <li><strong>Cloud Controller (CLC):</strong> The entry point for the entire cloud. It provides the web-based management console and exposes the AWS-compatible API endpoints. It routes requests to the correct components.</li>
+                <li><strong>Walrus:</strong> Provides persistent object storage, compatible with the <strong>AWS S3 (Simple Storage Service)</strong> API.</li>
+                <li><strong>Cluster Controller (CC):</strong> Manages a group of Node Controllers and is responsible for VM lifecycle management within its cluster. It is analogous to an AWS Availability Zone.</li>
+                <li><strong>Storage Controller (SC):</strong> Provides persistent block storage, compatible with the <strong>AWS EBS (Elastic Block Store)</strong> API. It manages block volumes and snapshots.</li>
+                <li><strong>Node Controller (NC):</strong> Runs on each server that hosts VMs. It controls the hypervisor (like KVM or Xen) on that node, fetching images and managing VM instances.</li>
+            </ul>
+
+            <h4>Architectural Diagram</h4>
+            <div class="css-diagram">
+                <div class="box" style="border-color: #6c757d;">
+                    <strong>User / Client</strong>
+                    <div class="node">e.g., AWS CLI</div>
+                </div>
+                <div class="arrow-down">↓ API Calls</div>
+                <div class="box" style="border-color: #ffc107; background-color: #fff9e6;">
+                    <strong>Cloud Controller (CLC)</strong>
+                </div>
+                <div class="arrow-down">↓ Manages</div>
+                <div class="cluster-container">
+                    <div class="box" style="flex: 1; border-color: #005a9c;">
+                        <strong>Cluster Controller (CC)</strong>
+                        <div class="arrow-down">↓</div>
+                        <div class="box" style="border-color: #005a9c; background-color: #e7f5ff; margin-bottom: 0;">
+                            <strong>Node Controller (NC)</strong>
+                            <div class="node vm">VM</div>
+                        </div>
+                    </div>
+                    <div class="box" style="flex: 1; border-color: #005a9c;">
+                        <strong>Cluster Controller (CC)</strong>
+                        <div class="arrow-down">↓</div>
+                        <div class="box" style="border-color: #005a9c; background-color: #e7f5ff; margin-bottom: 0;">
+                            <strong>Node Controller (NC)</strong>
+                            <div class="node vm">VM</div>
+                        </div>
+                    </div>
+                    <div class="box" style="flex: 1; border-color: #28a745; background-color: #eaf6ec;">
+                        <strong>Storage Services</strong>
+                        <div class="node">Walrus (S3)</div>
+                        <div class="node">SC (EBS)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <h3>3. Key Features & Use Cases</h3>
+            <ul>
+                <li><strong>AWS API Compatibility:</strong> The most significant feature. Existing AWS tools, scripts (using AWS CLI), and applications that use AWS APIs can often work on a Eucalyptus cloud without modification.</li>
+                <li><strong>Hybrid Cloud Enablement:</strong> Allows organizations to create a hybrid cloud environment. They can run workloads in their private Eucalyptus cloud and burst into the public AWS cloud for extra capacity when needed.</li>
+                <li><strong>Infrastructure as a Service (IaaS):</strong> Provides fundamental compute, network, and storage resources on demand, just like a public cloud provider.</li>
+                <li><strong>Use Cases:</strong> Ideal for organizations that need an on-premises, AWS-like environment for reasons of security, data sovereignty, low latency, or cost control. Popular in government, research, and academic institutions.</li>
+            </ul>
+        </section>
+
+        <section id="example">
+            <h3>4. Practical Example: AWS CLI with Eucalyptus</h3>
+            <p>Because Eucalyptus is API-compatible with AWS, you can use the standard AWS Command Line Interface (CLI) to interact with your private cloud after configuring it with the correct endpoint and credentials.</p>
+            
+            <h4>Sample AWS CLI Commands</h4>
+            <pre><code># Configure the AWS CLI to point to your Eucalyptus Cloud Controller
+$ aws configure
+AWS Access Key ID [None]: YOUR_EUCALYPTUS_ACCESS_KEY
+AWS Secret Access Key [None]: YOUR_EUCALYPTUS_SECRET_KEY
+Default region name [None]: my-private-cloud
+Default output format [None]: json
+
+# Set the endpoint URL to your Cloud Controller
+$ aws configure set endpoint_url http://your-clc-ip:8773
+
+# Now, use standard AWS commands on your private cloud
+
+# List available machine images
+$ aws ec2 describe-images
+
+# Launch a new VM instance
+$ aws ec2 run-instances --image-id emi-12345678 --instance-type t2.micro
+
+# List your running instances
+$ aws ec2 describe-instances
+</code></pre>
+        </section>
+
+        <section id="quiz">
+            <h3>🧠 Mini Quiz</h3>
+            <details>
+                <summary>1. What is the primary and most important feature of Eucalyptus?</summary>
+                <p><strong>Answer:</strong> Its <strong>compatibility with the AWS API</strong>. This allows users to build a private cloud that behaves like AWS and use familiar AWS tools to manage it.</p>
+            </details>
+            <details>
+                <summary>2. Which Eucalyptus component is responsible for managing the hypervisors on a specific server?</summary>
+                <p><strong>Answer:</strong> The <strong>Node Controller (NC)</strong>. It runs on each physical machine that hosts VMs and is responsible for controlling the hypervisor on that node.</p>
+            </details>
+            <details>
+                <summary>3. If you wanted to store files and objects in a Eucalyptus cloud similar to how you use AWS S3, which component would you interact with?</summary>
+                <p><strong>Answer:</strong> <strong>Walrus</strong>. It is the Eucalyptus component that provides an S3-compatible object storage service.</p>
+            </details>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        try {
+            mermaid.initialize({ 
+                startOnLoad: true, 
+                theme: 'default',
+                securityLevel: 'loose',
+                themeVariables: {
+                    primaryColor: '#f8f9fa',
+                    primaryTextColor: '#333',
+                    primaryBorderColor: '#005a9c',
+                    lineColor: '#005a9c',
+                    secondaryColor: '#ffc107',
+                    tertiaryColor: '#fff'
+                }
+            });
+            // Re-run mermaid after initialization to ensure diagrams render (though there are none in this file)
+            setTimeout(() => {
+                mermaid.init();
+            }, 100);
+        } catch (e) {
+            console.error("Mermaid failed to initialize", e);
+        }
+    </script>
+</body>
+</html>

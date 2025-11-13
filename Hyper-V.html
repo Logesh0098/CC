@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing Study Guide: Hyper-V</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root { --primary-color: #0078D4; --secondary-color: #7FBA00; --text-color: #333; --bg-color: #f4f6f8; --card-bg: #ffffff; --header-bg: #005A9E; --header-text: #ffffff; --accent-light: #e6f2fb; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; }
+        header.main-header { background-color: var(--header-bg); color: var(--header-text); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .course-info { text-align: right; font-size: 0.9rem; }
+        main { padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; flex-grow: 1; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-left: 5px solid var(--primary-color); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+        h1, h2, h3 { color: var(--header-bg); margin-top: 0; }
+        h1.topic-header { font-size: 2.5rem; text-align: center; margin-bottom: 2rem; color: var(--header-bg); border-bottom: 3px solid var(--secondary-color); padding-bottom: 0.5rem; }
+        h2 { font-size: 1.8rem; border-bottom: 2px solid var(--accent-light); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        strong { color: var(--header-bg); }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: var(--accent-light); font-weight: bold; color: var(--header-bg); }
+        tr:nth-child(even) { background-color: #fafafa; }
+        tr:hover { background-color: #f1f1f1; }
+        .mermaid { background: var(--card-bg); padding: 1.5rem; border-radius: 8px; text-align: center; margin: 1.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        pre { position: relative; background: #282c34; color: #abb2bf; padding: 1.5rem; border-radius: 8px; overflow-x: auto; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #61afef; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+        pre:hover .copy-btn { opacity: 1; }
+        details { background: var(--accent-light); border-radius: 8px; padding: 0.5rem 1.5rem; margin-top: 1rem; border: 1px solid #b3d7f2; }
+        summary { font-weight: bold; cursor: pointer; color: var(--header-bg); padding: 0.5rem 0; }
+        .quiz-answer { padding: 1rem; background: white; border-radius: 5px; margin-top: 0.5rem; }
+        .action-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .action-buttons button, .action-buttons a { background-color: var(--primary-color); color: white; border: none; border-radius: 50%; width: 56px; height: 56px; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center; text-decoration: none; transition: background-color 0.3s; }
+        .action-buttons button:hover, .action-buttons a:hover { background-color: #005A9E; }
+        footer { text-align: center; padding: 2rem; background: var(--header-bg); color: var(--header-text); margin-top: auto; }
+        @media (max-width: 768px) { main { padding: 1rem; } h1.topic-header { font-size: 2rem; } header.main-header { flex-direction: column; gap: 0.5rem; } }
+        @media print { body { background-color: white; color: black; } header.main-header, .action-buttons, footer { display: none; } main { padding: 0; max-width: 100%; } .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; } h1, h2, h3 { color: black !important; } pre { background: #f5f5f5; color: black; border: 1px solid #ddd; } }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">☁️ CloudLearn</div>
+        <div class="course-info">Cloud Computing — 21CSCU05D2 — LK<br>Generated: <span id="generation-date"></span></div>
+    </header>
+    <main>
+        <h1 class="topic-header">Microsoft Hyper-V</h1>
+        <section id="introduction" class="card">
+            <h2>📘 Concept Introduction</h2>
+            <p><strong>Hyper-V</strong> is Microsoft's native hardware virtualization technology. It is a <strong>Type-1 (bare-metal) hypervisor</strong> that allows users to create and run virtual machines on Windows. When enabled, Hyper-V runs directly on the host's hardware and the main Windows operating system actually runs in a special, privileged VM, making it a true bare-metal solution integrated deeply into the OS.</p>
+        </section>
+        <section id="analogy" class="card">
+            <h2>🧩 Analogy: The Limousine Chauffeur</h2>
+            <p>Enabling Hyper-V on your PC is like retrofitting a car with a limousine-style partition and hiring a chauffeur. Before, you were the driver. Now, a new, underlying chauffeur (the hypervisor) is in direct control of the car's engine and wheels (the hardware). You (the main Windows OS) move into a special passenger seat in the back (the "parent partition") from where you can still give directions. The chauffeur can also give isolated rides to other passengers (other VMs) in separate compartments, ensuring no one interferes with another.</p>
+        </section>
+        <section id="in-depth" class="card">
+            <h2>🔍 In-Depth Explanation</h2>
+            <h3>Hyper-V Architecture</h3>
+            <p>Hyper-V uses a microkernelized hypervisor architecture. The hypervisor layer is the first thing to load after the system boots, taking direct control of the hardware. All operating systems, including the host Windows OS, run on top of it in isolated areas called partitions.</p>
+            <ul>
+                <li><strong>Parent Partition (or Root Partition):</strong> This is the first partition created and it runs the host Windows OS (e.g., Windows 11 Pro, Windows Server). It is the only partition with direct access to hardware and is responsible for creating and managing child partitions.</li>
+                <li><strong>Child Partitions (or Guest Partitions):</strong> These are the virtual machines. They have no direct hardware access and communicate with it via a high-speed bus called the <strong>VMBus</strong>. All device requests are routed through the parent partition.</li>
+                <li><strong>VM Generations:</strong> Hyper-V supports two VM generations. <strong>Generation 1</strong> provides legacy BIOS-based hardware, while <strong>Generation 2</strong> provides modern UEFI-based firmware, enabling features like Secure Boot.</li>
+                <li><strong>Checkpoints:</strong> Similar to snapshots in other platforms, Checkpoints capture the state, data, and hardware configuration of a running VM.</li>
+            </ul>
+        </section>
+        <section id="examples" class="card">
+            <h2>🌍 Real-World Use Cases</h2>
+            <table>
+                <thead><tr><th>Use Case</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Microsoft Azure</strong></td><td>The entire Azure public cloud is built on a massive, customized version of Hyper-V. Every VM in Azure runs on this platform.</td></tr>
+                    <tr><td><strong>Enterprise Virtualization</strong></td><td>Companies use Hyper-V on Windows Server to consolidate physical servers, creating private clouds and reducing hardware costs.</td></tr>
+                    <tr><td><strong>Developer Workstations</strong></td><td>Hyper-V is the engine behind <strong>Windows Subsystem for Linux 2 (WSL2)</strong> and <strong>Docker Desktop on Windows</strong>, providing a lightweight VM for running Linux containers and tools.</td></tr>
+                    <tr><td><strong>Virtual Desktop Infrastructure (VDI)</strong></td><td>Deploying and managing virtualized Windows desktops for remote employees, often in conjunction with Remote Desktop Services.</td></tr>
+                    <tr><td><strong>Security</strong></td><td>Features like Virtualization-Based Security (VBS) use Hyper-V to create an isolated region of memory to protect credentials and other secrets.</td></tr>
+                </tbody>
+            </table>
+        </section>
+        <section id="visuals" class="card">
+            <h2>📊 Visual Representations</h2>
+            <h3>Hyper-V Type-1 Architecture</h3>
+            <div class="mermaid">
+                <pre class="mermaid">
+graph TD
+    subgraph Partitions
+        subgraph Parent Partition
+            B[Host Windows OS]
+        end
+        subgraph Child Partition 1
+            C1[Guest OS VM]
+        end
+        subgraph Child Partition 2
+            C2[Guest OS VM]
+        end
+    end
+    subgraph Hypervisor Layer
+        D[Hyper-V Hypervisor]
+    end
+    subgraph Hardware Layer
+        E[Physical Hardware]
+    end
+    
+    E --> D;
+    D --> B;
+    D --> C1;
+    D --> C2;
+    B -- Manages --> C1;
+    B -- Manages --> C2;
+
+    style E fill:#f9f9f9,stroke:#333
+    style D fill:#fafad2,stroke:#333
+    style B fill:#e6f2fb,stroke:#333
+    style C1 fill:#0078D4,stroke:#fff,color:#fff
+    style C2 fill:#0078D4,stroke:#fff,color:#fff
+                </pre>
+            </div>
+            <h3>Hyper-V vs. VMware vSphere/ESXi</h3>
+            <table>
+                <thead><tr><th>Aspect</th><th>Microsoft Hyper-V</th><th>VMware vSphere/ESXi</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Cost & Licensing</strong></td><td>Included with Windows Server and Windows Pro/Enterprise.</td><td>ESXi has a free version with limitations. vSphere is a licensed commercial product.</td></tr>
+                    <tr><td><strong>Management</strong></td><td>Hyper-V Manager, System Center VMM, PowerShell.</td><td>vSphere Client, vCenter Server. Industry standard for enterprise management.</td></tr>
+                    <tr><td><strong>Ecosystem</strong></td><td>Deeply integrated with Microsoft products (Azure, Active Directory).</td><td>Vast ecosystem of third-party integrations and mature, feature-rich management tools.</td></tr>
+                    <tr><td><strong>Market Position</strong></td><td>Dominant in Windows-centric environments and SMBs.</td><td>Long-time market leader in enterprise data centers.</td></tr>
+                </tbody>
+            </table>
+        </section>
+        <section id="updates" class="card">
+            <h2>🗞️ Recent Updates (2024–2025)</h2>
+            <ul>
+                <li><strong>2025-05-10:</strong> Microsoft introduced enhanced <strong>GPU Partitioning (GPU-P)</strong> in Windows Server 2025, allowing for more granular and efficient sharing of physical GPUs among multiple VMs, crucial for VDI and light AI workloads.</li>
+                <li><strong>2025-01-22:</strong> Azure Stack HCI now supports seamless <strong>live migration of VMs from on-premises Hyper-V clusters to the cloud</strong>, further blurring the lines between on-prem and Azure infrastructure.</li>
+                <li><strong>2024-09-30:</strong> Advancements in <strong>Shielded VMs</strong> and Virtualization-Based Security (VBS) provide stronger protections against host-level attacks, with expanded support for Linux guests.</li>
+            </ul>
+        </section>
+        <section id="summary" class="card">
+            <h2>📑 Summary</h2>
+            <ul>
+                <li>Hyper-V is Microsoft's native <strong>Type-1 (bare-metal) hypervisor</strong>.</li>
+                <li>It uses a unique architecture where the host OS runs in a privileged <strong>parent partition</strong>.</li>
+                <li>It is the foundational technology for <strong>Microsoft Azure</strong> and is deeply integrated into Windows Server and desktop editions.</li>
+                <li>Key developer features like <strong>WSL2 and Docker Desktop</strong> on Windows rely on Hyper-V for their functionality.</li>
+                <li>It offers robust features like Live Migration, Checkpoints, and advanced security through VBS and Shielded VMs.</li>
+            </ul>
+        </section>
+        <section id="quiz" class="card">
+            <h2>🧠 Mini Quiz</h2>
+            <details>
+                <summary>1. Is Hyper-V a Type-1 or Type-2 hypervisor?</summary>
+                <div class="quiz-answer"><p>Hyper-V is a <strong>Type-1 (bare-metal) hypervisor</strong>. When it's enabled, it loads before the main operating system and runs directly on the hardware.</p></div>
+            </details>
+            <details>
+                <summary>2. What is the "parent partition" in the Hyper-V architecture?</summary>
+                <div class="quiz-answer"><p>The <strong>parent partition</strong> (or root partition) is the special, privileged virtual machine that runs the host operating system (e.g., Windows 11). It is responsible for managing the hardware and creating/managing all the "child" partitions (the guest VMs).</p></div>
+            </details>
+            <details>
+                <summary>3. What popular Windows feature for developers relies on Hyper-V?</summary>
+                <div class="quiz-answer"><p><strong>Windows Subsystem for Linux 2 (WSL2)</strong> relies on Hyper-V. It runs a full Linux kernel inside a lightweight Hyper-V virtual machine, providing excellent performance and system call compatibility for developers.</p></div>
+            </details>
+        </section>
+    </main>
+    <div class="action-buttons">
+        <a id="download-link" href="#" download="Hyper-V.html" title="Download HTML">💾</a>
+        <button onclick="window.print()" title="Export as PDF">📄</button>
+    </div>
+    <footer>
+        <p>Generated by Gemini Visual Learning Assistant</p>
+        <p>Citation: Gemini (2025). <em>Cloud Computing Study Guide: Hyper-V</em>. Generated on <span id="footer-date"></span>.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date().toLocaleDateString();
+            document.getElementById('generation-date').textContent = today;
+            document.getElementById('footer-date').textContent = today;
+            try { 
+                mermaid.initialize({ 
+                    startOnLoad: true, 
+                    theme: 'default',
+                    securityLevel: 'loose',
+                    themeVariables: { 
+                        primaryColor: '#e6f2fb', 
+                        primaryTextColor: '#333', 
+                        primaryBorderColor: '#0078D4', 
+                        lineColor: '#005A9E', 
+                        secondaryColor: '#7FBA00' 
+                    }
+                }); 
+                // Re-run mermaid after initialization to ensure diagrams render
+                setTimeout(() => {
+                    mermaid.init();
+                }, 100);
+            } catch (e) { console.error("Mermaid.js failed.", e); }
+            try { hljs.highlightAll(); } catch(e) { console.error("Highlight.js failed.", e); }
+            function setDownloadLink() {
+                const downloadLink = document.getElementById('download-link');
+                const fileContent = '<!DOCTYPE html>
+' + document.documentElement.outerHTML;
+                const blob = new Blob([fileContent], { type: 'text/html;charset=utf-8' });
+                downloadLink.href = URL.createObjectURL(blob);
+            }
+            setDownloadLink();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing Study Guide: VMware</title>
+    <style>
+        :root {
+            --primary-color: #005a9c; /* Deep Blue */
+            --secondary-color: #ffc107; /* Yellow */
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --header-bg: #004070;
+            --header-text: #ffffff;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        main section {
+            background-color: var(--card-bg);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        h2, h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: var(--header-text);
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .mermaid {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        details {
+            margin-top: 1rem;
+            background: #f1f1f1;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+        }
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* CSS Diagram Styles */
+        .css-diagram {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 1.5em;
+            background: #fdfdfd;
+            text-align: center;
+            margin: 2em 0;
+        }
+        .css-diagram .box {
+            border: 2px solid;
+            border-radius: 5px;
+            padding: 1em;
+            margin: 1em auto;
+            background-color: #fff;
+        }
+        .css-diagram .cluster-container { display: flex; flex-flow: row wrap; justify-content: center; gap: 1em; }
+        .css-diagram .vm-container { display: flex; flex-flow: row wrap; justify-content: center; gap: 1em; }
+        .css-diagram .arrow-down, .css-diagram .arrow-up {
+            font-size: 1.5em;
+            color: #6c757d;
+            margin: -0.5em 0;
+        }
+        .css-diagram .node {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 0.5em;
+            margin-top: 0.8em;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Cloud Computing — 21CSCU05D2 — LK</h1>
+    </header>
+
+    <div class="container">
+        <section id="topic">
+            <h2>Topic: VMware</h2>
+        </section>
+
+        <section id="intro">
+            <h3>1. Introduction to VMware</h3>
+            <p>
+                <strong>VMware</strong> is a leading company in the field of virtualization and cloud computing. It provides a wide range of products for everything from desktop virtualization to managing entire enterprise-scale data centers. Its core product suite, <strong>VMware vSphere</strong>, is the de facto standard for virtualization in many corporate environments.
+            </p>
+            <ul>
+                <li><strong>Type 1 Hypervisor:</strong> VMware's flagship product, <strong>ESXi</strong>, is a Type 1 (bare-metal) hypervisor that installs directly onto physical servers.</li>
+                <li><strong>Type 2 Hypervisor:</strong> For desktop use, VMware offers <strong>Workstation</strong> (for Windows/Linux) and <strong>Fusion</strong> (for macOS), which are Type 2 hypervisors.</li>
+            </ul>
+        </section>
+
+        <section id="arch">
+            <h3>2. VMware vSphere Architecture</h3>
+            <p>VMware vSphere is not just a hypervisor; it's a full platform for managing a virtualized data center. The two main components are ESXi and vCenter Server.</p>
+            
+            <h4>Core Components</h4>
+            <ul>
+                <li><strong>VMware ESXi:</strong> The bare-metal hypervisor that runs the virtual machines. Multiple ESXi hosts can be grouped into a cluster.</li>
+                <li><strong>vCenter Server:</strong> A centralized management application that allows you to manage all your ESXi hosts and VMs from a single console. It is essential for advanced features like vMotion, High Availability (HA), and Distributed Resource Scheduler (DRS).</li>
+                <li><strong>Shared Storage:</strong> Typically, ESXi hosts in a cluster connect to shared storage solutions (like a SAN or NAS) where the VM files are kept. This allows VMs to be moved between hosts.</li>
+            </ul>
+
+            <h4>Architectural Diagram: vSphere Cluster</h4>
+            <div class="css-diagram">
+                <div class="box" style="border-color: #6c757d;">
+                    <strong>Administrator</strong>
+                </div>
+                <div class="arrow-down">↓ Manages</div>
+                <div class="box" style="border-color: #ffc107; background-color: #fff9e6;">
+                    <strong>vCenter Server</strong>
+                    <div class="node">Centralized Management</div>
+                </div>
+                <div class="arrow-down">↓ Controls</div>
+                <div class="cluster-container">
+                    <div class="box" style="flex: 1; border-color: #005a9c;">
+                        <strong>ESXi Host 1</strong>
+                        <div class="node">VM</div>
+                        <div class="node">VM</div>
+                    </div>
+                    <div class="box" style="flex: 1; border-color: #005a9c;">
+                        <strong>ESXi Host 2</strong>
+                        <div class="node">VM</div>
+                        <div class="node">VM</div>
+                    </div>
+                </div>
+                <div class="arrow-up">↑ Accesses</div>
+                <div class="box" style="border-color: #28a745; background-color: #eaf6ec;">
+                    <strong>Shared Storage</strong>
+                    <div class="node">vSAN, SAN, NAS</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <h3>3. Key vSphere Features</h3>
+            <p>vCenter Server enables a suite of powerful features that are critical for enterprise environments:</p>
+            <ul>
+                <li><strong>vMotion:</strong> Live migration of running virtual machines from one ESXi host to another with zero downtime.</li>
+                <li><strong>High Availability (HA):</strong> If an ESXi host fails, the VMs that were running on it are automatically restarted on other hosts in the cluster.</li>
+                <li><strong>Distributed Resource Scheduler (DRS):</strong> Automatically balances computing workloads across hosts in a cluster to ensure optimal performance.</li>
+                <li><strong>vSAN (Virtual SAN):</strong> A software-defined storage solution that pools the local storage from ESXi hosts into a single, high-performance datastore.</li>
+            </ul>
+        </section>
+
+        <section id="example">
+            <h3>4. Practical Example: PowerCLI</h3>
+            <p>VMware can be managed via the command line using <strong>PowerCLI</strong>, a set of PowerShell modules. This is used for automating administrative tasks.</p>
+            
+            <h4>Sample PowerCLI Script</h4>
+            <pre><code># Connect to the vCenter Server
+Connect-VIServer -Server vcenter.corp.local -User administrator
+
+# Get a list of all VMs
+Get-VM
+
+# Get all VMs that are powered on
+Get-VM | Where-Object {$_.PowerState -eq "PoweredOn"}
+
+# Create a snapshot of a specific VM before patching
+Get-VM -Name "WebApp01" | New-Snapshot -Name "Pre-Patch-Snapshot" -Description "Snapshot before applying OS updates"
+
+# Disconnect from the server
+Disconnect-VIServer -Confirm:$false
+</code></pre>
+        </section>
+
+        <section id="quiz">
+            <h3>🧠 Mini Quiz</h3>
+            <details>
+                <summary>1. What is the difference between VMware ESXi and vCenter Server?</summary>
+                <p><strong>Answer:</strong> <strong>ESXi</strong> is the Type-1 hypervisor that runs directly on a physical server to host VMs. <strong>vCenter Server</strong> is the centralized management platform used to manage multiple ESXi hosts, enabling advanced features like vMotion and High Availability.</p>
+            </details>
+            <details>
+                <summary>2. A running virtual machine is moved from one physical host to another with no interruption in service. What VMware feature enables this?</summary>
+                <p><strong>Answer:</strong> <strong>vMotion</strong>. It is a key feature of vSphere that allows for the live migration of running VMs, which is essential for performing hardware maintenance without downtime.</p>
+            </details>
+            <details>
+                <summary>3. Is VMware Workstation a Type 1 or Type 2 hypervisor?</summary>
+                <p><strong>Answer:</strong> <strong>Type 2 (Hosted)</strong>. VMware Workstation (and Fusion for Mac) are applications that run on top of an existing operating system like Windows or Linux to create and run VMs.</p>
+            </details>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        try {
+            mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: {
+                primaryColor: '#f8f9fa',
+                primaryTextColor: '#333',
+                primaryBorderColor: '#005a9c',
+                lineColor: '#005a9c',
+                secondaryColor: '#ffc107',
+                tertiaryColor: '#fff'
+            }});
+        } catch (e) {
+            console.error("Mermaid failed to initialize", e);
+        }
+    </script>
+</body>
+</html>

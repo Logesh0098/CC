@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing Study Guide: Deployment of Applications on the Cloud</title>
+    <style>
+        :root {
+            --primary-color: #005a9c; /* Deep Blue */
+            --secondary-color: #ffc107; /* Yellow */
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --header-bg: #004070;
+            --header-text: #ffffff;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        main section {
+            background-color: var(--card-bg);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        h2, h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: var(--header-text);
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #5a6268; }
+        .mermaid {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        details {
+            margin-top: 1rem;
+            background: #f1f1f1;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+        }
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+        footer button, footer a {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        footer button:hover, footer a:hover {
+            background-color: #004070;
+        }
+        .fallback {
+            color: #dc3545;
+            text-align: center;
+            padding: 1rem;
+            border: 1px dashed #dc3545;
+            border-radius: 5px;
+        }
+        .strategy-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+        .logo-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            padding: 1rem 0;
+        }
+        .logo-container img {
+            height: 45px;
+            max-width: 120px;
+            filter: grayscale(100%);
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        .logo-container img:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        @media print {
+            body {
+                background-color: #fff;
+                color: #000;
+            }
+            header, footer, .copy-btn {
+                display: none;
+            }
+            main section {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                page-break-inside: avoid;
+            }
+            .container {
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            h1, h2, h3 {
+                color: #000 !important;
+                border-bottom-color: #000 !important;
+            }
+            pre {
+                background-color: #f5f5f5 !important;
+                color: #000 !important;
+                border: 1px solid #ccc;
+            }
+            table, th, td {
+                border: 1px solid #ccc;
+            }
+            th {
+                background-color: #eee !important;
+                color: #000 !important;
+            }
+            .strategy-image, .logo-container img {
+                display: none;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+
+    <header>
+        <h1>Cloud Computing — 21CSCU05D2 — LK</h1>
+    </header>
+
+    <div class="container">
+        <section id="topic">
+            <h2>Topic: Deployment of Applications on the Cloud</h2>
+        </section>
+
+        <section id="concept-intro">
+            <h3>📘 Concept Introduction</h3>
+            <p>
+                <strong>Cloud Deployment</strong> is the process of making an application or service available for use by hosting it on a cloud provider's infrastructure, such as AWS, Azure, or GCP. Instead of running software on local, privately-owned servers, deployment shifts this responsibility to the vast, managed network of data centers owned by cloud vendors. The primary purpose is to leverage cloud-native benefits like on-demand scalability, high availability, global reach, and pay-as-you-go pricing, allowing organizations to innovate faster without the burden of managing physical hardware.
+            </p>
+        </section>
+
+        <section id="analogy">
+            <h3>🧩 Analogy: The Food Truck vs. The Food Court</h3>
+            <p>
+                Imagine you're a chef with a great new recipe (your application code). Deploying on-premise is like buying your own food truck. You're responsible for everything: the truck, the engine, the generator, the insurance, and finding a place to park. It gives you total control but is expensive and a lot of work.
+            </p>
+            <p>
+                <strong>Deploying to the cloud</strong> is like renting a stall in a massive, modern food court. The food court operator (the cloud provider) handles the building, electricity, water, security, and cleaning. You just bring your ingredients (your code) and start cooking. If your food becomes popular, you can easily rent a bigger stall or even multiple stalls (scalability) without having to build anything new yourself.
+            </p>
+        </section>
+
+        <section id="in-depth">
+            <h3>🔍 In-Depth Explanation</h3>
+            <p>Cloud deployment involves several key models and strategies that determine how much control you have and how the application is delivered.</p>
+            
+            <h4>Deployment Models (The "as-a-Service" Stack)</h4>
+            <ul>
+                <li><strong>Infrastructure as a Service (IaaS):</strong> The most flexible model. The cloud provider gives you fundamental building blocks like virtual machines (VMs), storage, and networking. You are responsible for the OS, middleware, and application. <em>Example: Renting the empty food court stall; you bring your own ovens and counters.</em></li>
+                <li><strong>Platform as a Service (PaaS):</strong> The provider manages the hardware and operating system. You just manage your application and data. This is ideal for developers who want to focus on coding. <em>Example: The stall comes with ovens, counters, and plumbing installed; you just cook.</em></li>
+                <li><strong>Software as a Service (SaaS):</strong> A fully-managed application you access via the internet. The provider manages everything. <em>Example: You don't cook at all; you just sell a pre-packaged brand of sandwiches made by someone else.</em></li>
+                <li><strong>Functions as a Service (FaaS / Serverless):</strong> The highest level of abstraction. You only provide code in the form of functions, which are executed in response to events. The provider manages everything, and you only pay for the exact execution time. <em>Example: You give your recipe to the food court, and they cook and serve one dish every time a customer orders it.</em></li>
+            </ul>
+
+            <h4>Modern Deployment Strategies</h4>
+            <p>To minimize downtime and risk during updates, teams use advanced strategies:</p>
+            <ul>
+                <li><strong>Blue-Green Deployment:</strong> Two identical production environments exist ("Blue" and "Green"). Blue is live. You deploy the new version to Green, test it, and then switch the router to send all traffic to Green. This allows for instant rollback if issues are found.<br>
+                <img src="https://www.researchgate.net/profile/Tosin-Adesanmi/publication/352422419/figure/fig3/AS:1035817224400898@1623979449931/Blue-green-deployment-Source-DZone-2020.png" alt="Blue-Green Deployment Diagram" class="strategy-image">
+                </li>
+                <li><strong>Canary Deployment:</strong> The new version is rolled out to a small subset of users (the "canaries"). You monitor for errors and performance. If all is well, you gradually roll it out to the entire user base.<br>
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*j03i-3G5E3f3j-3nS_l2tQ.png" alt="Canary Deployment Diagram" class="strategy-image">
+                </li>
+                <li><strong>Rolling Deployment:</strong> The new version slowly replaces instances of the old version one by one or in batches, ensuring a certain capacity is always available.</li>
+            </ul>
+        </section>
+
+        <section id="real-world">
+            <h3>🌍 Real-World Examples</h3>
+            <h4>Key Cloud Providers</h4>
+            <div class="logo-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Microsoft_Azure_Logo.svg" alt="Microsoft Azure Logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud Logo">
+            </div>
+            <p>Every major cloud provider offers a suite of tools that map to deployment concepts.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Deployment Concept</th>
+                        <th>Provider Services (AWS, Azure, GCP, Oracle, IBM)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Infrastructure as a Service (IaaS)</strong></td>
+                        <td>AWS EC2, Azure Virtual Machines, Google Compute Engine, Oracle Cloud VMware Solution, IBM Cloud Virtual Servers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Platform as a Service (PaaS)</strong></td>
+                        <td>AWS Elastic Beanstalk, Azure App Service, Google App Engine</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Container Orchestration (CaaS)</strong></td>
+                        <td>Amazon EKS/ECS, Azure Kubernetes Service (AKS), Google Kubernetes Engine (GKE), Oracle OKE, IBM Cloud Kubernetes Service</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Serverless Functions (FaaS)</strong></td>
+                        <td>AWS Lambda, Azure Functions, Google Cloud Functions, Oracle Cloud Functions, IBM Cloud Functions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Infrastructure as Code (IaC)</strong></td>
+                        <td>AWS CloudFormation, Azure Resource Manager (ARM), Google Cloud Deployment Manager, Terraform (multi-cloud)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CI/CD Pipelines</strong></td>
+                        <td>AWS CodePipeline, Azure DevOps, Google Cloud Build, Jenkins, GitLab CI/CD</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="visuals">
+            <h3>📊 Visual Representations</h3>
+
+            <h4>CI/CD Deployment Flowchart</h4>
+            <div class="mermaid">
+                graph TD
+                    A["Developer commits code to Git"] --> B{"CI Server (e.g., Jenkins, GitLab CI)"};
+                    B --> C["1. Build & Run Tests"];
+                    C --> D["2. Create Docker Image"];
+                    D --> E["3. Push Image to Container Registry"];
+                    E --> F{"CD Server (e.g., ArgoCD, Spinnaker)"};
+                    F --> G["4. Deploy to Cloud (e.g., Kubernetes, PaaS)"];
+                    G --> H["Application is Live!"];
+            </div>
+            <noscript>
+                <div class="fallback">
+                    <strong>Diagram Fallback:</strong> Developer commits code -> CI Server builds, tests, and creates a Docker image -> Image is pushed to a registry -> CD Server deploys the image to the cloud -> Application is live.
+                </div>
+            </noscript>
+
+            <h4>Layered Cloud Application Architecture</h4>
+            <div class="mermaid">
+                graph TD
+                    subgraph "User Layer"
+                        U[Users / Clients]
+                    end
+                    subgraph "Edge Layer"
+                        CDN[Content Delivery Network]
+                        WAF[Web Application Firewall]
+                    end
+                    subgraph "Application Layer (VPC)"
+                        LB[Load Balancer]
+                        subgraph "Compute"
+                            C1[Container 1]
+                            C2[Container 2]
+                            C3[...]
+                        end
+                    end
+                    subgraph "Data Layer (VPC)"
+                        DB[(Managed Database)]
+                        Cache[(In-Memory Cache)]
+                        FS[Object Storage]
+                    end
+                    U --> CDN;
+                    CDN --> WAF;
+                    WAF --> LB;
+                    LB --> C1;
+                    LB --> C2;
+                    LB --> C3;
+                    C1 & C2 & C3 --> DB;
+                    C1 & C2 & C3 --> Cache;
+                    C1 & C2 & C3 --> FS;
+            </div>
+             <noscript>
+                <div class="fallback">
+                    <strong>Diagram Fallback:</strong> User -> CDN/WAF -> Load Balancer -> Compute (Containers/VMs) -> Data Layer (Database, Cache, Storage).
+                </div>
+            </noscript>
+
+            <h4>Deployment Model Comparison</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th>IaaS (Infrastructure)</th>
+                        <th>PaaS (Platform)</th>
+                        <th>FaaS (Serverless)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>You Manage</strong></td>
+                        <td>Applications, Data, Runtime, Middleware, OS</td>
+                        <td>Applications, Data</td>
+                        <td>Just the code (Functions)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flexibility</strong></td>
+                        <td style="background:#d4edda;">High</td>
+                        <td style="background:#fff3cd;">Medium</td>
+                        <td style="background:#f8d7da;">Low</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Management Overhead</strong></td>
+                        <td style="background:#f8d7da;">High</td>
+                        <td style="background:#fff3cd;">Medium</td>
+                        <td style="background:#d4edda;">Very Low</td>
+                    </tr>
+                     <tr>
+                        <td><strong>Best For</strong></td>
+                        <td>Total control, legacy apps, custom stacks</td>
+                        <td>Rapid development, web apps, APIs</td>
+                        <td>Event-driven tasks, microservices, unpredictable traffic</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Cloud Deployment Model Adoption (2024, Illustrative)</h4>
+            <canvas id="deploymentModelChart" width="400" height="200"></canvas>
+        </section>
+
+        <section id="recent-updates">
+            <h3>🗞️ Recent Updates (2024-2025)</h3>
+            <ul>
+                <li><strong>2025-03-15: Rise of Server-Side WebAssembly (Wasm):</strong> Major cloud providers are expanding support for Wasm as a secure, high-performance alternative to containers. It offers near-native speed and a smaller footprint, making it ideal for edge computing and serverless functions.</li>
+                <li><strong>2024-11-01: Platform Engineering Becomes Mainstream:</strong> Companies are increasingly building Internal Developer Platforms (IDPs) on top of cloud infrastructure. These platforms abstract away the complexity of cloud deployment, providing developers with self-service "golden paths" to ship code quickly and reliably.</li>
+                <li><strong>2024-10-20: AI-Assisted Deployments (AIOps):</strong> CI/CD tools like GitLab and Azure DevOps are integrating AI to automatically analyze canary deployment metrics, predict potential failures, and even suggest optimal rollout strategies, reducing the need for manual intervention.</li>
+                <li><strong>2024-09-05: GreenOps and Sustainable Deployments:</strong> A growing focus on sustainability has led to new tools and features in cloud dashboards that help teams measure the carbon footprint of their deployments and choose regions or instance types that are more energy-efficient.</li>
+            </ul>
+        </section>
+        
+        <section id="mind-map-summary">
+             <h3>🗺️ Mind Map + Summary Table</h3>
+             <h4>Concept Mind Map</h4>
+             <div class="mermaid">
+                mindmap
+                  root((Cloud Deployment))
+                    Models
+                      IaaS
+                      PaaS
+                      SaaS
+                      FaaS / Serverless
+                    Strategies
+                      Blue-Green
+                      Canary
+                      Rolling
+                    Core Technologies
+                      Containers (Docker)
+                      Orchestration (Kubernetes)
+                      Infrastructure as Code (Terraform)
+                      CI/CD Pipelines
+                    Providers
+                      AWS
+                      Azure
+                      GCP
+             </div>
+             <noscript>
+                <div class="fallback">
+                    <strong>Mind Map Fallback:</strong> Central topic is Cloud Deployment. Branches are: Models (IaaS, PaaS, SaaS, FaaS), Strategies (Blue-Green, Canary), Technologies (Containers, Kubernetes, IaC), and Providers (AWS, Azure, GCP).
+                </div>
+            </noscript>
+
+            <h4>Summary of Key Takeaways</h4>
+            <table>
+                <thead>
+                    <tr><th>Area</th><th>Key Point</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Definition</strong></td><td>The process of hosting and running applications on a cloud provider's infrastructure.</td></tr>
+                    <tr><td><strong>Core Benefit</strong></td><td>Leverages scalability, reliability, and pay-as-you-go pricing, reducing hardware management.</td></tr>
+                    <tr><td><strong>Key Models</strong></td><td>IaaS, PaaS, and FaaS/Serverless offer increasing levels of abstraction and reduced management.</td></tr>
+                    <tr><td><strong>Automation</strong></td><td>CI/CD pipelines are essential for automating the build, test, and deployment process.</td></tr>
+                    <tr><td><strong>Risk Mitigation</strong></td><td>Strategies like Blue-Green and Canary deployments minimize downtime and risk during releases.</td></tr>
+                    <tr><td><strong>Dominant Tech</strong></td><td>Containers (Docker) and orchestration (Kubernetes) are the industry standard for portable deployments.</td></tr>
+                    <tr><td><strong>IaC</strong></td><td>Infrastructure as Code (e.g., Terraform) is crucial for managing cloud resources programmatically.</td></tr>
+                    <tr><td><strong>Future Trends</strong></td><td>Focus is shifting towards developer experience (Platform Engineering), efficiency (Wasm), and AI-driven operations.</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="quiz">
+            <h3>🧠 Mini Quiz</h3>
+            <details>
+                <summary>1. What is the key difference between Blue-Green and Canary deployment?</summary>
+                <p><strong>Answer:</strong> Blue-Green deployment switches 100% of traffic to a new, identical environment all at once, allowing for an instant rollback. Canary deployment, on the other hand, rolls out the new version to a small percentage of users first and gradually increases that percentage after observing for errors, making it a slower but potentially safer approach.</p>
+            </details>
+            <details>
+                <summary>2. Which cloud deployment model offers the highest level of abstraction for a developer?</summary>
+                <p><strong>Answer:</strong> FaaS (Functions-as-a-Service), also known as Serverless. In this model, the developer is only responsible for the application code (written as functions), while the cloud provider manages everything else, including the OS, runtime, and scaling.</p>
+            </details>
+            <details>
+                <summary>3. What is the role of a tool like Terraform in cloud deployment?</summary>
+                <p><strong>Answer:</strong> Terraform is an <strong>Infrastructure as Code (IaC)</strong> tool. Its role is to define and provision all the necessary cloud infrastructure (like virtual machines, networks, databases, and load balancers) through code. This allows infrastructure to be versioned, automated, and consistently replicated across different environments (e.g., dev, staging, production).</p>
+            </details>
+        </section>
+    </div>
+
+    <footer>
+        <a id="download-link" href="#" download="cloud-deployment-study-guide.html">Download HTML</a>
+        <button onclick="window.print()">Export as PDF</button>
+        <p><small>Generated by Gemini Visual Learning Assistant | 2025</small></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        try {
+            mermaid.initialize({ 
+                startOnLoad: true, 
+                theme: 'default',
+                securityLevel: 'loose',
+                themeVariables: {
+                    primaryColor: '#f8f9fa',
+                    primaryTextColor: '#333',
+                    primaryBorderColor: '#005a9c',
+                    lineColor: '#005a9c',
+                    secondaryColor: '#ffc107',
+                    tertiaryColor: '#fff'
+                }
+            });
+            // Re-run mermaid after initialization to ensure diagrams render
+            setTimeout(() => {
+                mermaid.init();
+            }, 100);
+        } catch (e) {
+            console.error("Mermaid failed to initialize", e);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        // Self-download link
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const downloadLink = document.getElementById('download-link');
+                if (downloadLink) {
+                    const htmlContent = document.documentElement.outerHTML;
+                    const blob = new Blob([htmlContent], { type: 'text/html' });
+                    downloadLink.href = URL.createObjectURL(blob);
+                }
+            } catch (e) {
+                console.error("Failed to create download link.", e);
+            }
+
+            // Syntax Highlighting
+            try {
+                hljs.highlightAll();
+            } catch(e) {
+                console.error("Highlight.js failed.", e);
+            }
+
+            // Chart.js
+            try {
+                const ctx = document.getElementById('deploymentModelChart');
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Containers (e.g., Kubernetes)', 'Serverless (FaaS)', 'PaaS (e.g., App Engine)', 'IaaS VMs'],
+                            datasets: [{
+                                label: 'Adoption %',
+                                data: [45, 25, 15, 15],
+                                backgroundColor: [
+                                    'rgba(0, 90, 156, 0.8)',
+                                    'rgba(255, 193, 7, 0.8)',
+                                    'rgba(74, 144, 226, 0.8)',
+                                    'rgba(108, 117, 125, 0.8)'
+                                ],
+                                borderColor: 'white',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: false,
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error("Chart.js failed.", e);
+                const chartCanvas = document.getElementById('deploymentModelChart');
+                if(chartCanvas) {
+                    chartCanvas.outerHTML = `<div class="fallback">Chart could not be loaded. Illustrative data: Containers (45%), Serverless (25%), PaaS (15%), IaaS VMs (15%).</div>`;
+                }
+            }
+            
+            // Copy buttons
+            document.querySelectorAll('pre').forEach(pre => {
+                const button = document.createElement('button');
+                button.className = 'copy-btn';
+                button.textContent = 'Copy';
+                pre.appendChild(button);
+
+                button.addEventListener('click', () => {
+                    const code = pre.querySelector('code').innerText;
+                    navigator.clipboard.writeText(code).then(() => {
+                        button.textContent = 'Copied!';
+                        setTimeout(() => {
+                            button.textContent = 'Copy';
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

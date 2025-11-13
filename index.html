@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing - Unit 03: Virtualization Technologies | 21CSCU05D2</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --accent-yellow: #f59e0b;
+            --light-bg: #f9fafb;
+            --dark-text: #1f2937;
+            --light-text: #f9fafb;
+            --page-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Merriweather', serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+            color: var(--dark-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: var(--page-shadow);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--light-text);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            position: relative;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .unit-info {
+            font-size: 1.5rem;
+            margin: 10px 0 20px;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .course-info {
+            background: #f3f4f6;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .index-container {
+            padding: 40px;
+        }
+
+        .index-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-yellow);
+        }
+
+        .index-header h2 {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            text-align: center;
+        }
+
+        .summary-section {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 40px;
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-content {
+            line-height: 1.8;
+        }
+
+        .summary-content p {
+            margin-bottom: 15px;
+        }
+
+        .learning-objectives {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        .learning-objectives li {
+            margin-bottom: 8px;
+        }
+
+        .index-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--accent-yellow);
+        }
+
+        .index-list {
+            list-style: none;
+        }
+
+        .index-item {
+            padding: 15px 0;
+            border-bottom: 1px dashed #d1d5db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .index-item:hover {
+            background-color: #f9fafb;
+            transform: translateX(5px);
+        }
+
+        .index-item:last-child {
+            border-bottom: none;
+        }
+
+        .index-term {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .index-term i {
+            margin-right: 10px;
+            color: var(--accent-yellow);
+        }
+
+        .index-page {
+            background: var(--primary-blue);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .index-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .index-link:hover {
+            text-decoration: none;
+        }
+
+        .toc-intro {
+            text-align: center;
+            font-style: italic;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .book-spine {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to right, #8b5cf6, #a78bfa, #8b5cf6);
+            border-left: 2px solid #7e22ce;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+            font-size: 0.9rem;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+        
+        .page-number {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .index-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .unit-info {
+                font-size: 1.2rem;
+            }
+            
+            .index-term {
+                font-size: 1.1rem;
+            }
+            
+            .index-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .index-page {
+                align-self: flex-end;
+            }
+        }
+
+        .decoration {
+            position: absolute;
+            opacity: 0.05;
+            font-size: 10rem;
+            z-index: -1;
+        }
+        
+        .decoration-1 {
+            top: 10%;
+            left: 5%;
+            transform: rotate(-15deg);
+        }
+        
+        .decoration-2 {
+            bottom: 10%;
+            right: 5%;
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-1">☁️</div>
+    <div class="decoration decoration-2">📚</div>
+
+    <div class="container">
+        <header>
+            <div class="book-spine"></div>
+            <h1>Cloud Computing</h1>
+            <p class="subtitle">A Comprehensive Study Guide</p>
+            <p class="unit-info">Unit 03: Virtualization Technologies</p>
+        </header>
+
+        <div class="course-info">
+            Course Code: 21CSCU05D2 — LK
+        </div>
+
+        <div class="index-container">
+            <div class="index-header">
+                <h2>Table of Contents</h2>
+            </div>
+            
+            <div class="summary-section">
+                <h3 class="summary-title"><i>📚</i> Unit 03: Virtualization Technologies Overview</h3>
+                <div class="summary-content">
+                    <p>This unit explores the fundamental concepts of virtualization, the technology that enables cloud computing. Virtualization allows multiple virtual machines to run on a single physical machine, maximizing resource utilization and providing the flexibility that cloud computing requires.</p>
+                    
+                    <p>Virtualization is essential for cloud computing as it provides the abstraction layer that makes cloud services possible. It allows cloud providers to efficiently allocate resources, quickly provision new instances, and maintain high availability and scalability.</p>
+                    
+                    <p><strong>Learning Objectives:</strong></p>
+                    <ul class="learning-objectives">
+                        <li>Understand the core principles of virtualization and its role in cloud computing</li>
+                        <li>Compare different virtualization technologies and hypervisor types</li>
+                        <li>Learn about various virtualization platforms and their use cases</li>
+                        <li>Explore deployment strategies for virtualized environments</li>
+                        <li>Analyze real-world applications and case studies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="toc-intro">
+                This study guide contains comprehensive materials for cloud computing concepts, 
+                virtualization technologies, and modern deployment strategies. Each topic 
+                includes visual aids, diagrams, and self-assessment quizzes.
+            </p>
+
+            <div class="index-section">
+                <h3 class="section-title">Part I: Introduction to Cloud Computing</h3>
+                <ul class="index-list">
+                    <li class="index-item">
+                        <a href="hypervisor.html" class="index-link">
+                            <span class="index-term"><i>챕</i>Hypervisor Technology</span>
+                        </a>
+                        <span class="index-page page-number">1</span>
+                    </li>
+                    <li class="index-item">
+                        <a href="deployment_of_applications_on_the_cloud.html" class="index-link">
+                            <span class="index-term"><i>🌐</i>Deployment of Applications on the Cloud</span>
+                        </a>
+                        <span class="index-page page-number">2</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="index-section">
+                <h3 class="section-title">Part II: Virtualization Technologies</h3>
+                <ul class="index-list">
+                    <li class="index-item">
+                        <a href="KVM.html" class="index-link">
+                            <span class="index-term"><i>📦</i>KVM (Kernel-based Virtual Machine)</span>
+                        </a>
+                        <span class="index-page page-number">3</span>
+                    </li>
+                    <li class="index-item">
+                        <a href="Xen.html" class="index-link">
+                            <span class="index-term"><i>🔒</i>Xen Hypervisor</span>
+                        </a>
+                        <span class="index-page page-number">4</span>
+                    </li>
+                    <li class="index-item">
+                        <a href="Hyper-V.html" class="index-link">
+                            <span class="index-term"><i>🖥️</i>Microsoft Hyper-V</span>
+                        </a>
+                        <span class="index-page page-number">5</span>
+                    </li>
+                    <li class="index-item">
+                        <a href="VMware.html" class="index-link">
+                            <span class="index-term"><i>🐳</i>VMware Virtualization</span>
+                        </a>
+                        <span class="index-page page-number">6</span>
+                    </li>
+                    <li class="index-item">
+                        <a href="VirtualBox.html" class="index-link">
+                            <span class="index-term"><i>💻</i>VirtualBox Platform</span>
+                        </a>
+                        <span class="index-page page-number">7</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="index-section">
+                <h3 class="section-title">Part III: Cloud Platforms & Services</h3>
+                <ul class="index-list">
+                    <li class="index-item">
+                        <a href="Amazon_EC2.html" class="index-link">
+                            <span class="index-term"><i>☁️</i>Amazon EC2 (Elastic Compute Cloud)</span>
+                        </a>
+                        <span class="index-page page-number">8</span>
+                    </li>
+                    <li class="index-item">
+                        <a href="Eucalyptus.html" class="index-link">
+                            <span class="index-term"><i>🔧</i>Eucalyptus Platform</span>
+                        </a>
+                        <span class="index-page page-number">9</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="index-section">
+                <h3 class="section-title">Part IV: Case Studies & Applications</h3>
+                <ul class="index-list">
+                    <li class="index-item">
+                        <a href="case_studies.html" class="index-link">
+                            <span class="index-term"><i>📋</i>Case Studies in Cloud Computing</span>
+                        </a>
+                        <span class="index-page page-number">10</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Cloud Computing Study Materials — 21CSCU05D2 — LK</p>
+            <p>Unit 03: Virtualization Technologies | © 2024</p>
+        </div>
+    </div>
+</body>
+</html>

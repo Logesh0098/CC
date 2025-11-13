@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing Study Guide: Hypervisor</title>
+    <style>
+        :root {
+            --primary-color: #005a9c; /* Deep Blue */
+            --secondary-color: #ffc107; /* Yellow */
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --header-bg: #004070;
+            --header-text: #ffffff;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        main section {
+            background-color: var(--card-bg);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        h2, h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: var(--header-text);
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .mermaid {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        details {
+            margin-top: 1rem;
+            background: #f1f1f1;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+        }
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* CSS Diagram Styles */
+        .css-diagram {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 1.5em;
+            background: #fdfdfd;
+            text-align: center;
+            margin: 2em 0;
+        }
+        .css-diagram .box {
+            border: 2px solid;
+            border-radius: 5px;
+            padding: 1em;
+            margin: 1em auto;
+        }
+        .css-diagram .hardware { border-color: #6c757d; background-color: #f8f9fa; }
+        .css-diagram .hypervisor { border-color: #005a9c; background-color: #e7f5ff; }
+        .css-diagram .vm-container { display: flex; flex-flow: row wrap; justify-content: center; gap: 1em; }
+        .css-diagram .vm { flex: 1; min-width: 180px; }
+        .css-diagram .dom0 { border-color: #ffc107; background-color: #fff9e6;}
+        .css-diagram .domU { border-color: #28a745; background-color: #eaf6ec;}
+        .css-diagram .arrow-down { font-size: 2em; color: #6c757d; margin: -0.5em 0; }
+        .css-diagram .node {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 0.5em;
+            margin-top: 0.8em;
+            border-radius: 4px;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+        footer button, footer a {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        footer button:hover, footer a:hover {
+            background-color: #004070;
+        }
+        .fallback {
+            color: #dc3545;
+            text-align: center;
+            padding: 1rem;
+            border: 1px dashed #dc3545;
+            border-radius: 5px;
+        }
+        .flex-container {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+        .flex-child {
+            flex: 1;
+        }
+        @media (max-width: 768px) {
+            .flex-container {
+                flex-direction: column;
+            }
+        }
+        @media print {
+            body {
+                background-color: #fff;
+                color: #000;
+            }
+            header, footer {
+                display: none;
+            }
+            main section {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                page-break-inside: avoid;
+            }
+            .container {
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            h1, h2, h3 {
+                color: #000 !important;
+                border-bottom-color: #000 !important;
+            }
+            pre {
+                background-color: #f5f5f5 !important;
+                color: #000 !important;
+                border: 1px solid #ccc;
+            }
+            table, th, td {
+                border: 1px solid #ccc;
+            }
+            th {
+                background-color: #eee !important;
+                color: #000 !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+
+    <header>
+        <h1>Cloud Computing — 21CSCU05D2 — LK</h1>
+    </header>
+
+    <div class="container">
+        <section id="topic">
+            <h2>Topic: Xen</h2>
+        </section>
+
+        <section id="intro">
+            <h3>1. Introduction to Xen</h3>
+            <p>
+                Xen is an open-source <strong>Type-1 hypervisor</strong>, which acts as a thin layer of software between the server's hardware and the operating systems running on it. Unlike Type-2 hypervisors that run on top of a conventional operating system, Xen runs directly on the hardware (or "bare metal"). This direct access allows it to manage and allocate hardware resources with high performance and efficiency.
+            </p>
+            <div class="highlight" style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 1em 0; border-radius: 4px;">
+                <strong>Key Idea:</strong> Xen is a foundational technology for virtualization, enabling multiple, isolated operating systems to run on a single physical machine. It was a pioneering force in the development of Infrastructure as a Service (IaaS) and is used by major cloud providers like Amazon Web Services (AWS) and Rackspace.
+            </div>
+        </section>
+
+        <section id="arch">
+            <h3>2. Xen Architecture</h3>
+            <p>The Xen architecture is based on a microkernel design and consists of three main components: the Hypervisor, Domain 0 (Dom0), and Guest Domains (DomU).</p>
+            
+            <h4>The Core Components</h4>
+            <ul>
+                <li><strong>Xen Hypervisor:</strong> The core of the system. It is responsible for CPU scheduling and memory partitioning. It has no knowledge of networking, storage, or other I/O devices.</li>
+                <li><strong>Domain 0 (Dom0):</strong> A special, privileged virtual machine that is the first to be loaded when the system boots. Dom0 contains the control stack (toolstack) to manage the hypervisor and other domains, as well as the drivers for the physical hardware devices. All I/O from other domains is funneled through Dom0.</li>
+                <li><strong>Guest Domains (DomU):</strong> Unprivileged virtual machines that run the user workloads (e.g., web servers, databases). These domains are isolated from the hardware and from each other. They rely on Dom0 for access to physical devices.</li>
+            </ul>
+
+            <h4>Architectural Diagram</h4>
+            <div class="css-diagram">
+                <div class="box hardware">
+                    <strong>Physical Hardware</strong>
+                    <div class="node">CPU, Memory, I/O Devices</div>
+                </div>
+                <div class="arrow-down">↓</div>
+                <div class="box hypervisor">
+                    <strong>Xen Hypervisor</strong>
+                </div>
+                <div class="arrow-down">↓</div>
+                <div class="vm-container">
+                    <div class="box vm dom0">
+                        <strong>Domain 0 (Privileged)</strong>
+                        <div class="node">Control Tools (xl)</div>
+                        <div class="node">Device Drivers</div>
+                    </div>
+                    <div class="box vm domU">
+                        <strong>Domain U (Unprivileged)</strong>
+                        <div class="node">PV Guest (Linux)</div>
+                    </div>
+                    <div class="box vm domU">
+                        <strong>Domain U (Unprivileged)</strong>
+                        <div class="node">HVM Guest (Windows)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="concepts">
+            <h3>3. Key Concepts & Virtualization Modes</h3>
+            <p>Xen supports two primary modes of virtualization, which determine how guest operating systems interact with the hypervisor.</p>
+
+            <h4>Paravirtualization (PV)</h4>
+            <p>
+                In Paravirtualization, the kernel of the guest operating system is <strong>modified</strong> to be aware that it is running on a hypervisor. Instead of making hardware calls that would fail, the PV guest makes "hypercalls" directly to the Xen hypervisor. This is a highly efficient method of communication.
+            </p>
+            <ul>
+                <li><strong>Pros:</strong> High performance, low overhead, as there is no need for hardware emulation.</li>
+                <li><strong>Cons:</strong> Requires a modified OS kernel. Not suitable for proprietary operating systems like Windows whose source code cannot be changed.</li>
+            </ul>
+
+            <h4>Hardware-Assisted Virtualization (HVM)</h4>
+            <p>
+                HVM leverages virtualization extensions from the host CPU (Intel VT-x or AMD-V). This allows an <strong>unmodified</strong> operating system, such as Microsoft Windows, to run as a guest. Xen uses QEMU to emulate PC hardware (like BIOS, disk controllers, and network cards) for the HVM guest.
+            </p>
+            <ul>
+                <li><strong>Pros:</strong> Can run any unmodified operating system.</li>
+                <li><strong>Cons:</strong> Higher overhead due to the need for hardware emulation and CPU-level trapping (VM exits). Performance can be lower than PV for I/O-intensive tasks.</li>
+            </ul>
+        </section>
+
+        <section id="example">
+            <h3>4. Practical Example: Creating a Guest VM</h3>
+            <p>Managing Xen VMs is typically done from the Dom0 command line using the <code>xl</code> toolstack. The process involves creating a configuration file that defines the VM's resources and then using <code>xl create</code> to start it.</p>
+            
+            <h4>Sample VM Configuration File (<code>my_vm.cfg</code>)</h4>
+            <pre><code># --- Generic VM Settings ---
+name = "web-server-01"
+memory = 1024   # in MB
+vcpus = 2
+
+# --- Paravirtualized (PV) Boot Settings ---
+kernel = "/path/to/vmlinuz"
+ramdisk = "/path/to/initrd.img"
+extra = "root=/dev/xvda1 ro"
+
+# --- Disk Configuration ---
+disk = [ 'phy:/dev/vg0/web-server-lv,xvda1,w', 'phy:/dev/vg0/swap-lv,xvda2,w' ]
+
+# --- Network Configuration ---
+vif = [ 'bridge=xenbr0' ]
+</code></pre>
+
+            <h4>Commands</h4>
+            <p>Once the configuration file is ready, you can use the following commands in Dom0:</p>
+            <pre><code># Create and start the VM
+xl create my_vm.cfg
+
+# List running VMs
+xl list
+
+# Access the console of the VM
+xl console web-server-01
+
+# Shutdown the VM
+xl shutdown web-server-01</code></pre>
+        </section>
+
+        <section id="quiz">
+            <h3>🧠 Mini Quiz</h3>
+            <details>
+                <summary>1. What is the primary role of Domain 0 (Dom0) in the Xen architecture?</summary>
+                <p><strong>Answer:</strong> To manage the hypervisor, control other domains, and provide device drivers. Dom0 is the privileged management domain.</p>
+            </details>
+            <details>
+                <summary>2. Which virtualization mode requires modifying the guest operating system's kernel?</summary>
+                <p><strong>Answer:</strong> <strong>Paravirtualization (PV)</strong>. The guest OS is modified to make efficient 'hypercalls' to the hypervisor instead of standard hardware calls.</p>
+            </details>
+            <details>
+                <summary>3. Xen is considered which type of hypervisor?</summary>
+                <p><strong>Answer:</strong> <strong>Type-1 (Bare Metal)</strong>. It runs directly on the hardware for maximum performance and security.</p>
+            </details>
+        </section>
+    </div>
+
+    <footer>
+        <a id="download-link" href="#" download="hypervisor-study-guide.html">Download HTML</a>
+        <button onclick="window.print()">Export as PDF</button>
+        <p><small>Generated by Gemini Visual Learning Assistant | 2025</small></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        try {
+            mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: {
+                primaryColor: '#f8f9fa',
+                primaryTextColor: '#333',
+                primaryBorderColor: '#005a9c',
+                lineColor: '#005a9c',
+                secondaryColor: '#ffc107',
+                tertiaryColor: '#fff'
+            }});
+        } catch (e) {
+            console.error("Mermaid failed to initialize", e);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const downloadLink = document.getElementById('download-link');
+                if (downloadLink) {
+                    const htmlContent = document.documentElement.outerHTML;
+                    const blob = new Blob([htmlContent], { type: 'text/html' });
+                    downloadLink.href = URL.createObjectURL(blob);
+                }
+            } catch (e) {
+                console.error("Failed to create download link.", e);
+            }
+
+            try {
+                hljs.highlightAll();
+            } catch(e) {
+                console.error("Highlight.js failed.", e);
+            }
+
+            try {
+                const ctx = document.getElementById('hypervisorMarketChart');
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['VMware', 'KVM', 'Microsoft Hyper-V', 'Xen'],
+                            datasets: [{
+                                label: 'Market Share % (Illustrative)',
+                                data: [40, 30, 20, 10],
+                                backgroundColor: [
+                                    'rgba(0, 90, 156, 0.8)',
+                                    'rgba(255, 193, 7, 0.8)',
+                                    'rgba(74, 144, 226, 0.8)',
+                                    'rgba(108, 117, 125, 0.8)'
+                                ],
+                                borderColor: 'white',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error("Chart.js failed.", e);
+                const chartCanvas = document.getElementById('hypervisorMarketChart');
+                if(chartCanvas) {
+                    chartCanvas.outerHTML = `<div class="fallback">Chart could not be loaded. Illustrative data: VMware (40%), KVM (30%), Hyper-V (20%), Xen (10%).</div>`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
